@@ -1,4 +1,4 @@
-from graphs_algorithms.Graph_Builder import GraphBuilder
+from graphs_algorithms.graph_builder import GraphBuilder
 
 
 source_dir = "graphs"

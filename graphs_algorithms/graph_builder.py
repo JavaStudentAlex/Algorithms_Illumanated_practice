@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import genfromtxt
-from graphs_algorithms.Adjacency_List_Graph import AdjacencyListGraph
-from graphs_algorithms.Adjacency_Matrix_Graph import AdjacencyMatrixGraph
+from graphs_algorithms.adjacency_list_graph import AdjacencyListGraph
+from graphs_algorithms.adjacency_matrix_graph import AdjacencyMatrixGraph
 
 
 class GraphBuilder:

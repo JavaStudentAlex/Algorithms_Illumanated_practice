@@ -1,4 +1,4 @@
-from graphs_algorithms.Graph_Abstract import GraphAbstract
+from graphs_algorithms.graph_abstract import GraphAbstract
 
 
 class AdjacencyMatrixGraph(GraphAbstract):

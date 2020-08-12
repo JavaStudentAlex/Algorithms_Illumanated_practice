@@ -1,4 +1,4 @@
-from graphs_algorithms.Graph_Abstract import GraphAbstract
+from graphs_algorithms.graph_abstract import GraphAbstract
 
 
 class AdjacencyListGraph(GraphAbstract):
@@ -160,6 +160,9 @@ class AdjacencyListGraph(GraphAbstract):
             raise IndexError
 
         return min(next_nodes_variant, key=lambda node_cost_pair: node_cost_pair[1])
+
+def find_best_spanning_tree_kraskala():
+    pass
 
 
 
