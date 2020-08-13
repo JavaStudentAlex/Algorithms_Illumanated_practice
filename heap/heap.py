@@ -45,10 +45,7 @@ class Heap:
             return None
 
         min_val_pair = self.__elements[0]
-        self.__swap(0, -1)
-        del self.__elements[-1]
-        self.__bubble_down()
-
+        self.__remove_element(0)
         return min_val_pair
 
     # must work for log(n)
@@ -64,3 +61,31 @@ class Heap:
 
     def get_size(self):
         return len(self.__elements)
+
+    def remove_by_key_val(self, key, val):
+        element_index = self.__find_by_key_val_pair(key, val)
+        if element_index is not None:
+            self.__remove_element(element_index)
+
+    def __find_by_key_val_pair(self, key, value, current_index=0):
+        if current_index >= len(self.__elements):
+            return None
+
+        current_key, current_val = self.__elements[current_index]
+
+        if (key, value) == (current_key, current_val):
+            return current_index
+
+        elif key >= current_key:
+            left_result = self.__find_by_key_val_pair(key, value, current_index * 2 + 1)
+            if left_result is not None:
+                return left_result
+
+            right_result = self.__find_by_key_val_pair(key, value, current_index * 2 + 2)
+            if right_result is not None:
+                return right_result
+
+    def __remove_element(self, index):
+        self.__swap(index, -1)
+        del self.__elements[-1]
+        self.__bubble_down()

@@ -1,5 +1,5 @@
 from greedy_algorithms.haffman_tree import HaffmanTree
-from graphs_algorithms.heap import Heap
+from heap.heap import Heap
 
 
 def cover_by_nodes(freq_iter):

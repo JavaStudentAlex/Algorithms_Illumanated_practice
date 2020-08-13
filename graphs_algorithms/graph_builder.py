@@ -40,15 +40,31 @@ class GraphBuilder:
 
         return result_adjacency_list
 
-    def build_from_list(self, list_source_file):
-        data_for_adjacency_list = genfromtxt(fname=list_source_file, dtype="int", delimiter=' ')
+    def build_from_simple_list(self, file_path):
+        data = genfromtxt(fname=file_path, dtype="int", delimiter=' ')
 
-        nodes = len(np.unique(data_for_adjacency_list))
-        edges = len(data_for_adjacency_list)
+        def weight_extract(data_row):
+            return 1
+
+        return self.__build_from_list(data, weight_extract)
+
+    def build_from_weighted_list(self, file_path):
+        data = genfromtxt(fname=file_path, dtype="int", delimiter=' ', skip_header=True)
+
+        def weight_extract(data_row):
+            return data_row[2]
+
+        return self.__build_from_list(data, weight_extract)
+
+    def __build_from_list(self, data_for_adjacency_list, weight_extracted):
+
+        nodes = len(np.unique(data_for_adjacency_list[:, :2]))
+        edges = len(data_for_adjacency_list[:, 0])
         result_adjacency_list = [dict() for node in range(nodes)]
 
         def insert_data_into_adjacency_list(row):
-            result_adjacency_list[row[0]-1][row[1]-1] = 1
+            result_adjacency_list[row[0] - 1][row[1] - 1] = weight_extracted(row)
+            result_adjacency_list[row[1] - 1][row[0] - 1] = weight_extracted(row)
 
         np.apply_along_axis(insert_data_into_adjacency_list, 1, data_for_adjacency_list)
         return AdjacencyListGraph(result_adjacency_list) if self.__is_sparse(nodes, edges) \

@@ -1,4 +1,5 @@
 from graphs_algorithms.graph_abstract import GraphAbstract
+from heap.heap import Heap
 
 
 class AdjacencyListGraph(GraphAbstract):
@@ -161,8 +162,57 @@ class AdjacencyListGraph(GraphAbstract):
 
         return min(next_nodes_variant, key=lambda node_cost_pair: node_cost_pair[1])
 
-def find_best_spanning_tree_kraskala():
-    pass
+    def find_best_spanning_tree_prima(self):
+        start_node = 0
+        heap = Heap([])
+        found_nodes = {start_node}
+        new_graph_list = [dict() for node in range(len(self.graph))]
+
+        self.__push_edges_to_heap(start_node, heap, found_nodes)
+
+        while heap.get_size() > 0:
+            best_edge = heap.pop_min()
+            cost, start_stop_node = best_edge
+            start, finish_current_node = start_stop_node
+            additional_edges = self.__find_additional_edges_from_found_to_discovered_node(finish_current_node,
+                                                                                          found_nodes,
+                                                                                          best_edge)
+            self.__remove_additional_edges(additional_edges, heap)
+            found_nodes.add(finish_current_node)
+            self.__push_edges_to_heap(finish_current_node, heap, found_nodes)
+
+            self.__add_best_edge_to_new_graph(start, finish_current_node, cost, new_graph_list)
+        return AdjacencyListGraph(new_graph_list)
+
+    def __push_edges_to_heap(self, start_node, heap, found_nodes):
+        adjacent_nodes = self.graph[start_node]
+        for finish_node in adjacent_nodes.keys():
+            if finish_node not in found_nodes:
+                heap.insert((adjacent_nodes[finish_node], (start_node, finish_node)))
+
+    def __find_additional_edges_from_found_to_discovered_node(self, discovered_node, found_nodes, found_edge):
+        result = list()
+
+        for known_node in found_nodes:
+            adjacency_nodes = self.graph[known_node]
+            if discovered_node in adjacency_nodes.keys():
+                edge = (adjacency_nodes[discovered_node], (known_node, discovered_node))
+                if edge != found_edge:
+                    result.append(edge)
+        return result
+
+    def __remove_additional_edges(self, edges, heap):
+        for edge in edges:
+            heap.remove_by_key_val(*edge)
+
+    def __add_best_edge_to_new_graph(self, start, finish, cost, new_graph_list):
+        new_graph_list[start][finish] = cost
+        new_graph_list[finish][start] = cost
+
+
+
+
+
 
 
 
